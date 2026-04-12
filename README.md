@@ -3,6 +3,11 @@
 > *Redefining digital education with elegance, performance, and intelligence.*
 
 ---
+DEPLOYMENT LINK:
+
+https://lms-techub.vercel.app
+
+---
 
 ## ✨ Overview
 
