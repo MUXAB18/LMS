@@ -65,4 +65,23 @@ const getAnalytics = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, deleteUser, getAnalytics };
+// @desc    Update user status (approve/disable)
+// @route   PATCH /api/users/:id/status
+// @access  Admin
+const updateUserStatus = async (req, res) => {
+  try {
+    const { isApproved } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.isApproved = isApproved;
+    await user.save();
+
+    res.json({ message: `User status updated to ${isApproved ? 'Approved' : 'Pending'}` });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { getAllUsers, deleteUser, getAnalytics, updateUserStatus };

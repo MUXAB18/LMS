@@ -90,6 +90,21 @@ const seedDB = async () => {
       console.log('Instructor already exists');
     }
 
+    // Make sure we have an Admin
+    let admin = await User.findOne({ email: 'admin@learnhub.com' });
+    if (!admin) {
+      await User.create({
+        name: 'System Administrator',
+        email: 'admin@learnhub.com',
+        password: 'admin123',
+        role: 'admin',
+        isApproved: true
+      });
+      console.log('Created Admin: admin@learnhub.com | pw: admin123');
+    } else {
+      console.log('Admin already exists');
+    }
+
     console.log('Seeding courses...');
     for (const course of coursesToSeed) {
       const exists = await Course.findOne({ title: course.title });

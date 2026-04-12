@@ -26,7 +26,10 @@ const register = async (req, res) => {
     const allowedRoles = ['student', 'instructor'];
     const userRole = allowedRoles.includes(role) ? role : 'student';
 
-    const user = await User.create({ name, email, password, role: userRole });
+    // Instructors must be approved by an admin
+    const isApproved = userRole !== 'instructor';
+
+    const user = await User.create({ name, email, password, role: userRole, isApproved });
 
     res.status(201).json({
       _id: user._id,
@@ -54,6 +57,13 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Check if account is approved
+    if (!user.isApproved) {
+      return res.status(403).json({ 
+        message: 'Your instructor account is pending approval. Please contact the administrator.' 
+      });
     }
 
     res.json({

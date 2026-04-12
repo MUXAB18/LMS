@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    isApproved: {
+      type: Boolean,
+      default: true, // Students and Admins are approved by default
+    },
   },
   { timestamps: true }
 );

@@ -34,6 +34,17 @@ const ManageUsers = () => {
     }
   };
 
+  const handleStatusUpdate = async (id, currentStatus) => {
+    try {
+      const newStatus = !currentStatus;
+      await API.patch(`/users/${id}/status`, { isApproved: newStatus });
+      toast.success(newStatus ? 'User Approved' : 'User Status Updated');
+      setUsers(users.map(u => u._id === id ? { ...u, isApproved: newStatus } : u));
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Update failed');
+    }
+  };
+
   const filtered = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -64,7 +75,7 @@ const ManageUsers = () => {
         <div className="table-responsive">
           <table className="table lms-table">
             <thead>
-              <tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr>
+              <tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>
             </thead>
             <tbody>
               {filtered.map((u) => (
@@ -72,7 +83,10 @@ const ManageUsers = () => {
                   <td>
                     <div className="d-flex align-items-center gap-2">
                       <div className="user-avatar-sm">{u.name.charAt(0).toUpperCase()}</div>
-                      {u.name}
+                      <div>
+                        <div className="fw-medium">{u.name}</div>
+                        <div className="text-muted small">{new Date(u.createdAt).toLocaleDateString()}</div>
+                      </div>
                       {u._id === currentUser._id && <span className="badge bg-secondary ms-1">You</span>}
                     </div>
                   </td>
@@ -82,15 +96,30 @@ const ManageUsers = () => {
                       {u.role}
                     </span>
                   </td>
-                  <td className="text-muted small">{new Date(u.createdAt).toLocaleDateString()}</td>
                   <td>
-                    {u._id !== currentUser._id ? (
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(u._id, u.name)}>
-                        <i className="bi bi-trash me-1"></i>Delete
-                      </button>
+                    {u.role === 'admin' ? (
+                      <span className="badge bg-success bg-opacity-10 text-success p-2 rounded-3 border border-success border-opacity-25">Verified Admin</span>
+                    ) : u.isApproved ? (
+                      <span className="badge bg-info bg-opacity-10 text-info p-2 rounded-3 border border-info border-opacity-25">Approved</span>
                     ) : (
-                      <span className="text-muted small">—</span>
+                      <span className="badge bg-warning bg-opacity-10 text-warning p-2 rounded-3 border border-warning border-opacity-25">Pending Approval</span>
                     )}
+                  </td>
+                  <td>
+                    <div className="d-flex gap-2">
+                      {u.role === 'instructor' && !u.isApproved && (
+                        <button className="btn btn-sm btn-success" onClick={() => handleStatusUpdate(u._id, u.isApproved)}>
+                          <i className="bi bi-check-circle me-1"></i>Approve
+                        </button>
+                      )}
+                      {u._id !== currentUser._id ? (
+                        <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(u._id, u.name)}>
+                          <i className="bi bi-trash me-1"></i>Delete
+                        </button>
+                      ) : (
+                        <span className="text-muted small">—</span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

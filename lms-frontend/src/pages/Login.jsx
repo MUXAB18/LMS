@@ -133,6 +133,27 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Admin Credentials Notice */}
+          <div className="mt-4 p-3 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10">
+            <div className="d-flex gap-2 align-items-center mb-2">
+              <span className="fs-5">🛡️</span>
+              <span className="fw-bold text-primary small">Admin Portal Access</span>
+            </div>
+            <p className="small text-muted mb-2">
+              Admins can manage all users and approve new instructor accounts. Use these credentials to test:
+            </p>
+            <div className="d-flex flex-column gap-1">
+              <div className="d-flex justify-content-between">
+                <span className="small fw-medium opacity-75">Email:</span>
+                <code className="small text-primary fw-bold">admin@learnhub.com</code>
+              </div>
+              <div className="d-flex justify-content-between">
+                <span className="small fw-medium opacity-75">Password:</span>
+                <code className="small text-primary fw-bold">admin123</code>
+              </div>
+            </div>
+          </div>
+
           {/* Footer Divider */}
           <div className="position-relative text-center my-4">
             <hr className="text-muted opacity-25" />
