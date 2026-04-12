@@ -48,17 +48,82 @@ const getAnalytics = async (req, res) => {
     const totalCourses = await Course.countDocuments();
     const totalEnrollments = await Enrollment.countDocuments();
 
-    // Recent registrations (last 7 days)
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    const recentUsers = await User.countDocuments({ createdAt: { $gte: sevenDaysAgo } });
+    // 1. Calculate Total Revenue (Assuming each enrollment = course price)
+    const revenueStats = await Enrollment.aggregate([
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'course',
+          foreignField: '_id',
+          as: 'courseDetails',
+        },
+      },
+      { $unwind: '$courseDetails' },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$courseDetails.price' },
+        },
+      },
+    ]);
+    const totalRevenue = revenueStats.length > 0 ? revenueStats[0].totalRevenue : 0;
+
+    // 2. Enrollment Trends (Last 30 Days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const enrollmentTrends = await Enrollment.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: thirtyDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // 3. Category Stats
+    const categoryStats = await Course.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      { $project: { name: '$_id', value: '$count', _id: 0 } },
+    ]);
+
+    // 4. Popular Courses
+    const popularCourses = await Course.find()
+      .sort({ enrollmentCount: -1 })
+      .limit(5)
+      .select('title enrollmentCount price');
+
+    // 5. Recent Enrollments
+    const recentEnrollmentDocs = await Enrollment.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate('student', 'name email')
+      .populate('course', 'title price');
 
     res.json({
-      totalUsers,
-      totalStudents,
-      totalInstructors,
-      totalCourses,
-      totalEnrollments,
-      recentUsers,
+      summary: {
+        totalUsers,
+        totalStudents,
+        totalInstructors,
+        totalCourses,
+        totalEnrollments,
+        totalRevenue,
+      },
+      enrollmentTrends,
+      categoryStats,
+      popularCourses,
+      recentEnrollments: recentEnrollmentDocs,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
