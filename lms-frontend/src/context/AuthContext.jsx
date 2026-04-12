@@ -29,9 +29,18 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await API.post('/auth/register', { name, email, password, role });
-      setUser(data);
-      localStorage.setItem('lmsUser', JSON.stringify(data));
-      return { success: true };
+      
+      // If there's a token, log the user in
+      if (data.token) {
+        setUser(data);
+        localStorage.setItem('lmsUser', JSON.stringify(data));
+      }
+      
+      return { 
+        success: true, 
+        requiresApproval: data.requiresApproval, 
+        message: data.message 
+      };
     } catch (err) {
       return { success: false, message: err.response?.data?.message || 'Registration failed' };
     } finally {

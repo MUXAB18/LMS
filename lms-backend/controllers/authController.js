@@ -31,6 +31,14 @@ const register = async (req, res) => {
 
     const user = await User.create({ name, email, password, role: userRole, isApproved });
 
+    // If instructor, don't return token (they can't login yet)
+    if (user.role === 'instructor') {
+      return res.status(201).json({
+        message: 'Account created! Waiting for admin approval to login as an instructor or login as admin to approve this instructor.',
+        requiresApproval: true
+      });
+    }
+
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -62,7 +70,7 @@ const login = async (req, res) => {
     // Check if account is approved
     if (!user.isApproved) {
       return res.status(403).json({ 
-        message: 'Your instructor account is pending approval. Please contact the administrator.' 
+        message: 'Waiting for admin approval to login as an instructor or login as admin to approve this instructor.' 
       });
     }
 

@@ -15,8 +15,13 @@ const Register = () => {
     if (form.password.length < 6) return toast.error('Password must be at least 6 characters');
     const result = await register(form.name, form.email, form.password, form.role);
     if (result.success) {
-      toast.success('Account created! Welcome to LearnHub 🎉');
-      navigate('/');
+      if (result.requiresApproval) {
+        toast.info(result.message || 'Registration successful! Waiting for admin approval.');
+        navigate('/login');
+      } else {
+        toast.success('Account created! Welcome to LearnHub 🎉');
+        navigate('/');
+      }
     } else {
       toast.error(result.message);
     }
