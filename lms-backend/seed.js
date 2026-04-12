@@ -79,31 +79,32 @@ const seedDB = async () => {
     // Make sure we have an instructor
     let instructor = await User.findOne({ email: 'teacher@learnhub.com' });
     if (!instructor) {
-      instructor = await User.create({
-        name: 'Master Teacher',
-        email: 'teacher@learnhub.com',
-        password: 'password123',
-        role: 'instructor'
-      });
-      console.log('Created Instructor: teacher@learnhub.com | pw: password123');
+      instructor = new User({ email: 'teacher@learnhub.com' });
+      console.log('Creating Instructor: teacher@learnhub.com');
     } else {
-      console.log('Instructor already exists');
+      console.log('Updating Instructor: teacher@learnhub.com');
     }
+    instructor.name = 'Master Teacher';
+    instructor.password = 'password123';
+    instructor.role = 'instructor';
+    instructor.isApproved = true;
+    await instructor.save();
+    console.log('Instructor set | pw: password123');
 
     // Make sure we have an Admin
     let admin = await User.findOne({ email: 'admin@learnhub.com' });
     if (!admin) {
-      await User.create({
-        name: 'System Administrator',
-        email: 'admin@learnhub.com',
-        password: 'admin123',
-        role: 'admin',
-        isApproved: true
-      });
-      console.log('Created Admin: admin@learnhub.com | pw: admin123');
+      admin = new User({ email: 'admin@learnhub.com' });
+      console.log('Creating Admin: admin@learnhub.com');
     } else {
-      console.log('Admin already exists');
+      console.log('Updating Admin: admin@learnhub.com');
     }
+    admin.name = 'System Administrator';
+    admin.password = 'admin123';
+    admin.role = 'admin';
+    admin.isApproved = true;
+    await admin.save();
+    console.log('Admin set | pw: admin123');
 
     console.log('Seeding courses...');
     for (const course of coursesToSeed) {
