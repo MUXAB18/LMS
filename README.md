@@ -196,3 +196,5 @@ Follow these steps to run LEARNHUB on your own machine:
 4. Start the frontend from `lms-frontend` with `npm run dev` and open the local URL printed in the terminal.
 
 See the **Installation Guide** above for the full step-by-step setup.
+## 🤝 Contributing
+Contributions are welcome. To contribute, fork the repository, create a feature branch, make your changes, and open a pull request with a clear description of what you changed and why. Please keep pull requests focused on a single change.
