@@ -183,3 +183,16 @@ npm run dev
 
 
 Designed and Devloped by Musab Iftikhar
+
+---
+
+## 🚀 Quick Start (How to Run Locally)
+
+Follow these steps to run LEARNHUB on your own machine:
+
+1. Install the prerequisites listed above: **Node.js (v18+)** and **MongoDB** (Atlas or a local instance).
+2. Clone this repository, then run `npm install` inside both `lms-backend` and `lms-frontend`.
+3. Create a `.env` file in `lms-backend` with `PORT`, `MONGO_URI`, and `JWT_SECRET`, then start the backend with `npm run dev`.
+4. Start the frontend from `lms-frontend` with `npm run dev` and open the local URL printed in the terminal.
+
+See the **Installation Guide** above for the full step-by-step setup.
