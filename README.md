@@ -197,7 +197,14 @@ Follow these steps to run LEARNHUB on your own machine:
 
 See the **Installation Guide** above for the full step-by-step setup.
 ## 🤝 Contributing
+
+Documentation review and improvements by musabiftikhar4-bit
 Contributions are welcome. To contribute, fork the repository, create a feature branch, make your changes, and open a pull request with a clear description of what you changed and why. Please keep pull requests focused on a single change.
 
 ## 📄 License
 This project is developed for learning and demonstration purposes. You are free to explore the code, learn from it, and build on it for your own educational projects.
+
+## 👥 Contributors
+This project is built and maintained collaboratively. See the contributors graph for everyone who has contributed code and documentation to this project.
+
+
