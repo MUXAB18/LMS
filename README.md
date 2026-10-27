@@ -105,8 +105,8 @@ Crafted with modern architecture, high-end UI/UX principles, and scalable backen
 ### 📥 Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/luxury-lms.git
-cd luxury-lms
+git clone https://github.com/MUXAB18/LMS.git
+cd LMS
 ```
 
 ---
