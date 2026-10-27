@@ -105,8 +105,8 @@ Crafted with modern architecture, high-end UI/UX principles, and scalable backen
 ### 📥 Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/luxury-lms.git
-cd luxury-lms
+git clone https://github.com/MUXAB18/LMS.git
+cd LMS
 ```
 
 ---
@@ -207,4 +207,4 @@ This project is developed for learning and demonstration purposes. You are free 
 ## 👥 Contributors
 This project is built and maintained collaboratively. See the contributors graph for everyone who has contributed code and documentation to this project.
 
-
+**Developed by Musab**
